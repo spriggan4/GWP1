@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">GWP1</string>
+    <string name="choice_schedule_drawer_open">알린시간 설정과 운동 메뉴 선택창에서 메뉴 열기</string>
+    <string name="choice_schedule_drawer_close">알린시간 설정과 운동 메뉴 선택창에서 메뉴 닫기</string>
+    <string name="manBtn">남</string>
+    <string name="girlBtn">여</string>
+    <string name="choiceGenderText">당신의 성별을 고르세요</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="next">다음</string>
+    <string name="setHeight">키를 입력하세요</string>
+    <string name="setCurWeight">현재 몸무게를 입력하세요</string>
+    <string name="setDesireWeight">목표 몸무게를 입력하세요</string>
+    <string name="setActionTimeInAWeek">일주일 활동량을 입력하세요</string>
+    <string name="HowLongAreYouActivePerWeek">일주일동안 얼마나 활동하나요</string>
+    <string name="lessActivity">활동량 적음</string>
+    <string name="highActivity">활동량 많음</string>
+    <string name="normal">보통</string>
+    <string name="high">많음</string>
+    <string name="WhatIsTheMaximumNumberOfMealsPerDay">하루에 가능한 최대 끼니 횟수는 몇번인가요</string>
+    <string name="inputNum">횟수를 입력하세요</string>
+    <string name="whatTimeDoYouSleepRegularly">규칙적으로 잠들 수 있는 시간은 몇시인가요</string>
+    <string name="inputTime">시간을 입력하세요</string>
+    <string name="canSleepTimeText">수면시간</string>
+    <string name="view_title1">CustomView1</string>
+    <string name="set_day_schedule_key">set_day_schedule_key</string>
+    <string name="set_action_time_in_week_key">set_action_time_in_week_key</string>
+    <string name="set_birth_year_key">set_birth_year_key</string>
+    <string name="set_birth_month_key">set_birth_month_key</string>
+    <string name="set_birth_day_key">set_birth_day_key</string>
+    <string name="set_can_eat_per_day_key">set_can_eat_per_day_key</string>
+    <string name="set_can_sleep_time_hour_key">set_can_sleep_time_hour_key</string>
+    <string name="set_can_sleep_time_min_key">set_can_sleep_time_min_key</string>
+    <string name="set_current_weight_key">set_current_weight_key</string>
+    <string name="set_desire_weight_key">set_desire_weight_key</string>
+    <string name="set_gender_key">set_gender_key</string>
+    <string name="set_height_key">set_height_key</string>
+    <string name="setting_nums_file_key">setting_nums_file_key</string>
+    <string name="set_activity_day_schedule_file_key">set_activity_day_schedule_file_key</string>
+    <string name="menu">menu</string>
+    <string name="reset">리셋</string>
+    <string name="menu_reset_information">Reset Information</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="inputEatKcalNum">먹은 칼로리량을 입력하세요</string>
+</resources>
