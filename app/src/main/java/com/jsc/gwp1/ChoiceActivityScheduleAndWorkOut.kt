@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_set_day_schedule.*
 import kotlinx.android.synthetic.main.activity_set_kcal_eaten.*
 import kotlinx.android.synthetic.main.choice_schedule_app_bar.*
 import kotlinx.android.synthetic.main.list_view_kcal_eaten.*
+import kotlinx.android.synthetic.main.view_set_time.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,8 +34,10 @@ class ChoiceActivityScheduleAndWorkOut : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toast: Toast
+
     private val realm = Realm.getDefaultInstance()
     private var backKeyPressedTime: Long = 0
+    private var totalKcalNum: Int = 0
 
     //private val adapter = KcalToEatExtensionDataAdapter()
 
@@ -122,22 +125,25 @@ class ChoiceActivityScheduleAndWorkOut : AppCompatActivity() {
         val adapter = KcalEatenListAdapter(realmResult)
         lvKcalEaten.adapter = adapter
 
-        for (kcalEatenRealm in realmResult) {
-            totalKcalNum =+ kcalEatenRealm.kcalDate
-        }
-
         // 데이터가 변경되면 어댑터에 적용
-        realmResult.addChangeListener { _ -> adapter.notifyDataSetChanged() }
+        realmResult.addChangeListener { _ ->
+            //Log.d(TAG,"리스트뷰 수정")
+            adapter.notifyDataSetChanged()
+        }
 
         lvKcalEaten.setOnItemClickListener { parent, view, position, id ->
             // 먹은 칼로리 수정
             startActivity<SetActivityKcalEaten>("id" to id)
-            Log.d(TAG, "lvKcalEaten 클릭 리스너 실행")
+            //Log.d(TAG, "lvKcalEaten 리스트뷰 클릭 id 값 : " + id)
         }
         // 먹은 칼로리 추가
         fabAddKcalEaten.setOnClickListener {
             startActivity<SetActivityKcalEaten>()
-            Log.d(TAG, "fabAddKcalEaten 클릭 리스너 실행")
+            //Log.d(TAG, "fabAddKcalEaten 클릭 리스너 실행")
+        }
+
+        fabResetKcalEaten.setOnClickListener {
+            listViewReset()
         }
 
         val toolBar: Toolbar = findViewById(R.id.my_toolbar)
@@ -201,10 +207,14 @@ class ChoiceActivityScheduleAndWorkOut : AppCompatActivity() {
 
         runOnUiThread {
             val averageKcal = Math.round(needCarl / numOfEatPerDay)
-            KcalToEatDuringTheDayText.text = "오늘 섭취량 $totalKcalNum/${Math.round(needCarl)}Carl"
             averageKcalToEatText.text =
                 "끼니당 평균 필요 섭취량은 $averageKcal"
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        editKcalListView()
     }
 
     override fun onBackPressed() {
@@ -231,8 +241,29 @@ class ChoiceActivityScheduleAndWorkOut : AppCompatActivity() {
         }
     }
 
-    private fun addingToTotalKcal() {
+    private fun editKcalListView() {
+        //토탈칼로리 재설정
+        val realmResult = realm.where<KcalEaten>().findAll()
+        totalKcalNum = 0
+        for (kcalEatenRealm in realmResult) {
+            totalKcalNum += kcalEatenRealm.kcalDate
+        }
 
+        //리스트뷰에서 삭제된게 있으면 clasification을 다시 차례대로 바꾸기
+
+
+        runOnUiThread {
+            KcalToEatDuringTheDayText.text = "오늘 섭취량 $totalKcalNum/${Math.round(needCarl)}Carl"
+        }
+    }
+
+    private fun listViewReset(){
+        //TODO 밑에 줄 방식이 잘못되었음. realmData를 어떻게 모두 삭제하고 리스트뷰에 적용시킬 것인가 찾기
+        realm.where<KcalEaten>().findAll().deleteAllFromRealm()
+        val realmResult = realm.where<KcalEaten>().findAll()
+
+        val adapter = KcalEatenListAdapter(realmResult)
+        lvKcalEaten.adapter = adapter
     }
 
     override fun onDestroy() {

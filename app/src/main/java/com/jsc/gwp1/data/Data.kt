@@ -16,6 +16,4 @@ var height by Delegates.notNull<Int>()
 var needCarl by Delegates.notNull<Double>()
 var age by Delegates.notNull<Int>()
 
-var totalKcalNum by Delegates.notNull<Int>()
-
 val CHANNEL_ID="GWP_Special"

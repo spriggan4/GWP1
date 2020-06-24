@@ -68,6 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/KcalToEatDuringTheDayText" />
 
     <include
+        android:id="@+id/include"
         layout="@layout/list_view_kcal_eaten"
         android:layout_width="411dp"
         android:layout_height="407dp"
@@ -84,5 +85,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabResetKcalEaten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginBottom="48dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintStart_toStartOf="@+id/include"
+        app:srcCompat="@drawable/ic_baseline_replay_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

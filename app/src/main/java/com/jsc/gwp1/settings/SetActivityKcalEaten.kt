@@ -3,6 +3,7 @@ package com.jsc.gwp1.settings
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.jsc.gwp1.R
 import com.jsc.gwp1.data.KcalEaten
 import io.realm.Realm
@@ -10,7 +11,9 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_set_kcal_eaten.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
+import kotlin.properties.Delegates
 
 class SetActivityKcalEaten : AppCompatActivity() {
     private val TAG = "SetActivityKcalEaten"
@@ -19,6 +22,7 @@ class SetActivityKcalEaten : AppCompatActivity() {
     //칼로리량만 입력하면 되고 대신 현재 시간이 입력되도록
     private val realm = Realm.getDefaultInstance()
     private val databaseNum = nextId()
+    private var num by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,7 @@ class SetActivityKcalEaten : AppCompatActivity() {
         if (id == -1L) {
             insertMode()
         } else {
+            //Log.d(TAG, "updateMode() 함수 들어감. id 는 " + id)
             updateMode(id)
         }
     }
@@ -50,28 +55,22 @@ class SetActivityKcalEaten : AppCompatActivity() {
     }
 
     private fun insertKcalEaten() {
-        realm.beginTransaction()
-        val kcalEaten = realm.createObject<KcalEaten>(databaseNum)
-        kcalEaten.classification = "${databaseNum + 1} 번째 섭취"
-        kcalEaten.kcalDate = etnKcalEaten.text.toString().toInt()
-        realm.commitTransaction()
-
-        alert("내용이 추가되었습니다.") {
-            yesButton { finish() }
-        }.show()
+        if (etnKcalEaten.text.isBlank()) {
+            Toast.makeText(this, "칼로리를 입력하셔야 됩니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            realm.beginTransaction()
+            val kcalEaten = realm.createObject<KcalEaten>(databaseNum)
+            kcalEaten.classification = "${databaseNum + 1} 번째 섭취"
+            kcalEaten.kcalDate = etnKcalEaten.text.toString().toInt()
+            realm.commitTransaction()
+        }
     }
 
     private fun updateMode(id: Long) {
         realm.where<KcalEaten>().equalTo("id", id)
-            .findFirst()?.apply {
-                realm.beginTransaction()
-                kcalDate = etnKcalEaten.text.toString().toInt()
-                realm.commitTransaction()
 
-                alert("내용이 추가되었습니다.") {
-                    yesButton { finish() }
-                }.show()
-            }
+        tvKcalEatenTitle.text = "${id + 1}번째 섭취량을 수정하세요"
+        etnKcalEaten.hint = "섭취한 칼로리를 수정하세요"
 
         fabAddDone.setOnClickListener {
             updateKcalEaten(id)
@@ -83,27 +82,29 @@ class SetActivityKcalEaten : AppCompatActivity() {
     }
 
     private fun updateKcalEaten(id: Long) {
-        realm.where<KcalEaten>().equalTo("id", id)
-            .findFirst()?.apply {
-                realm.beginTransaction()
-                kcalDate = etnKcalEaten.text.toString().toInt()
-                realm.commitTransaction()
-
-                alert("내용이 변경되었습니다.") {
-                    yesButton { finish() }
-                }.show()
-            }
+        if (etnKcalEaten.text.isBlank()) {
+            Toast.makeText(this, "칼로리를 입력하셔야 됩니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            realm.where<KcalEaten>().equalTo("id", id)
+                .findFirst()?.apply {
+                    realm.beginTransaction()
+                    kcalDate = etnKcalEaten.text.toString().toInt()
+                    realm.commitTransaction()
+                }
+        }
     }
 
     private fun deleteKcalEaten(id: Long) {
         realm.beginTransaction()
-        val todo = realm.where<KcalEaten>().equalTo("id", id).findFirst()!!
-        todo.deleteFromRealm()
+        val kcalEaten = realm.where<KcalEaten>().equalTo("id", id).findFirst()!!
+        kcalEaten.deleteFromRealm()
+        val realmResult = realm.where<KcalEaten>().findAll()
+        num = 0
+        for (kcalEaten in realmResult) {
+            num += 1
+            kcalEaten.classification = "${num}번째 섭취"
+        }
         realm.commitTransaction()
-
-        alert("내용이 삭제되었습니다.") {
-            yesButton { finish() }
-        }.show()
     }
 
     //realm 데이터베이스에 순차적으로 번호를 지정하기 위한 함수
